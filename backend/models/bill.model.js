@@ -1,9 +1,9 @@
-import Mongoose from "mongoose";
+import mongoose from "mongoose";
 
-const BillSchema = new Mongoose.Schema(
+const BillSchema = new mongoose.Schema(
   {
     client: {
-      type: Mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Client",
     },
@@ -94,6 +94,6 @@ const BillSchema = new Mongoose.Schema(
   }
 );
 
-const Bill = Mongoose.model("Bill", BillSchema);
+const Bill = mongoose.model("Bill", BillSchema);
 
 export default Bill;
