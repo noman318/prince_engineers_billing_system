@@ -14,6 +14,7 @@ const BillSchema = new mongoose.Schema(
     invoice_no: {
       type: Number,
       required: true,
+      unique: true,
     },
     invoice_date: {
       type: String,
@@ -50,6 +51,7 @@ const BillSchema = new mongoose.Schema(
     },
     Grand_Total: {
       type: Number,
+      required: true,
       default: 0,
     },
     GST_No: {
@@ -58,11 +60,19 @@ const BillSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      required: true,
     },
     hsn_code: {
       type: String,
       required: true,
+    },
+    amount_in_words: {
+      type: String,
+      required: true,
+    },
+    Our_GST_No: {
+      type: String,
+      required: true,
+      default: "27AWLPS1825L1ZZ",
     },
     orderItems: [
       {

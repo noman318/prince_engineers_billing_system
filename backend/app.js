@@ -5,6 +5,7 @@ import colors from "colors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.route.js";
 import clientRoutes from "./routes/client.route.js";
+import billRoutes from "./routes/bill.route.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 const app = express();
 const port = 5000;
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/clients", clientRoutes);
+app.use("/api/bills", billRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
