@@ -54,8 +54,11 @@ const getAllUsers = async (req, res, next) => {
 const getUserByID = async (req, res, next) => {
   const { _id } = req.user;
   try {
-    const user = await User.findById(_id);
-    return res.json(user);
+    const user = await User.findById(_id).select("_id name email isAdmin");
+    if (user) {
+      return res.json(user);
+    }
+    throw new Error("User not Found");
   } catch (error) {
     next(error);
   }
