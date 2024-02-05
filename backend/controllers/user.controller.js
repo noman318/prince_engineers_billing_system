@@ -42,4 +42,9 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-export { registerUser, loginUser };
+const getAllUsers = async (req, res) => {
+  const allUsers = await User.find({}).select("-password");
+  res.json(allUsers);
+};
+
+export { registerUser, loginUser, getAllUsers };
