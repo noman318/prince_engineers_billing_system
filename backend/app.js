@@ -4,6 +4,7 @@ import connectToDb from "./config/db.js";
 import colors from "colors";
 import cookieParser from "cookie-parser";
 import userRoutes from "./routes/user.route.js";
+import { errorHandler, notFound } from "./middleware/errorHandler.js";
 const app = express();
 const port = 5000;
 
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRoutes);
 
-// app.use();
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(port, console.log(`Server running on port ${port}`.yellow.bold));

@@ -42,9 +42,13 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-const getAllUsers = async (req, res) => {
-  const allUsers = await User.find({}).select("-password");
-  res.json(allUsers);
+const getAllUsers = async (req, res, next) => {
+  try {
+    const allUsers = await User.find({}).select("-password");
+    res.json(allUsers);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getUserByID = async (req, res, next) => {
