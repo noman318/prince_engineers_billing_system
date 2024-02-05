@@ -29,7 +29,10 @@ const loginUser = async (req, res, next) => {
     // console.log("user", user);
     if (user && (await user.matchPassword(password))) {
       generateToken(res, user._id);
-      res.json(user);
+      //   res.json(user);
+      const { email, name, isAdmin, _id } = user;
+      const newUser = { email, name, isAdmin, _id };
+      res.json(newUser);
     } else {
       throw new Error("Invalid Email or Password");
     }
