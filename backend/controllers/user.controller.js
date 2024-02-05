@@ -47,4 +47,14 @@ const getAllUsers = async (req, res) => {
   res.json(allUsers);
 };
 
-export { registerUser, loginUser, getAllUsers };
+const getUserByID = async (req, res, next) => {
+  const { _id } = req.user;
+  try {
+    const user = await User.findById(_id);
+    return res.json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { registerUser, loginUser, getAllUsers, getUserByID };

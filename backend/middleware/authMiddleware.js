@@ -4,10 +4,12 @@ import User from "../models/user.model.js";
 const protect = async (req, res, next) => {
   let token;
   token = req.cookies.jwt;
-  //   console.log("token", token);
+  // console.log("token", token);
   if (token) {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded._id).select("-password");
+    console.log("decoded", decoded);
+    req.user = await User.findById(decoded.userId).select("-password");
+    // console.log("req.userInMiddleware", req.user);
     next();
   } else {
     res.status(401).json({ message: "Unauthorized" });
