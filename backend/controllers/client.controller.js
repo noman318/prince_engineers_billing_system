@@ -78,4 +78,27 @@ const updateClientById = async (req, res, next) => {
   }
 };
 
-export { createClient, getAllClients, getClientById, updateClientById };
+const deleteClient = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const client = await Client.findById(id);
+    // console.log("client", client);
+    if (client) {
+      const deletedClient = await Client.findOneAndDelete({ _id: id });
+      // console.log("deletedClient", deletedClient);
+      return res.json(deletedClient);
+    } else {
+      throw new Error("Client not Found");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {
+  createClient,
+  getAllClients,
+  getClientById,
+  updateClientById,
+  deleteClient,
+};

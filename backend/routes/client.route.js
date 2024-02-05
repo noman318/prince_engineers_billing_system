@@ -5,10 +5,15 @@ import {
   getAllClients,
   getClientById,
   updateClientById,
+  deleteClient,
 } from "../controllers/client.controller.js";
 const router = express.Router();
 
 router.route("/").post(protect, createClient).get(protect, getAllClients);
-router.route("/:id").get(protect, getClientById).put(protect, updateClientById);
+router
+  .route("/:id")
+  .get(protect, getClientById)
+  .put(protect, updateClientById)
+  .delete(protect, deleteClient);
 
 export default router;
