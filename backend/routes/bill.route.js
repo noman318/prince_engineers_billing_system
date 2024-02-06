@@ -1,11 +1,13 @@
 import express from "express";
-import { protect } from "../middleware/authMiddleware.js";
+import { admin, protect } from "../middleware/authMiddleware.js";
 import {
   createNewBill,
   deleteBill,
   getAllBills,
   getBillByID,
   updateExistingBill,
+  updateBillToPaid,
+  updateOrderToDelivered,
 } from "../controllers/bill.controller.js";
 const router = express.Router();
 
@@ -15,5 +17,7 @@ router
   .put(protect, updateExistingBill)
   .get(protect, getBillByID)
   .delete(protect, deleteBill);
+router.route("/:id/pay").put(protect, admin, updateBillToPaid);
+router.route("/:id/deliver").put(protect, admin, updateOrderToDelivered);
 
 export default router;

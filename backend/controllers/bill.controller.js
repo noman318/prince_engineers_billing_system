@@ -141,6 +141,10 @@ const updateExistingBill = async (req, res, next) => {
   }
 };
 
+const updateBillToPaid = async (req, res, next) => {};
+
+const updateOrderToDelivered = async (req, res, next) => {};
+
 const deleteBill = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -162,4 +166,6 @@ export {
   getAllBills,
   getBillByID,
   deleteBill,
+  updateBillToPaid,
+  updateOrderToDelivered,
 };
