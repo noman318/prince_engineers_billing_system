@@ -42,6 +42,14 @@ const loginUser = async (req, res, next) => {
   }
 };
 
+const logOutUser = async (req, res, next) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: "Logged Out" });
+};
+
 const getAllUsers = async (req, res, next) => {
   try {
     const allUsers = await User.find({}).select("-password");
@@ -64,4 +72,4 @@ const getUserByID = async (req, res, next) => {
   }
 };
 
-export { registerUser, loginUser, getAllUsers, getUserByID };
+export { registerUser, loginUser, getAllUsers, getUserByID, logOutUser };

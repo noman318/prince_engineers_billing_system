@@ -4,7 +4,7 @@ import FormContainer from "../components/FormContainer";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../slices/usersApiSLice";
+import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 
 const LoginScreen = () => {

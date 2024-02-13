@@ -3,11 +3,14 @@ import { Container, Button, Form, Row, Col, Table } from "react-bootstrap";
 import { FaRegTrashAlt, FaPlusCircle } from "react-icons/fa";
 import numberToWords from "number-to-words";
 import indianNumberFormat from "indian-number-format";
+import { useCreateBillMutation } from "../slices/billsApiSlice";
+import { toast } from "react-toastify";
+
 const CreateBillScreen = () => {
   const initialBillData = {
     client: "",
     name: "",
-    Company_GST_No: "",
+    GST_No: "",
     Our_GST_No: "27AWLPS1825L1ZZ",
     invoice_no: 0,
     invoice_date: "",
@@ -38,6 +41,8 @@ const CreateBillScreen = () => {
   const [orderArray, setOrderArray] = useState([]);
   //   console.log("orderItems", orderItems);
   //   console.log("orderArray", orderArray);
+  const [createBill, { isLoading }] = useCreateBillMutation();
+
   let totalVal;
   totalVal = orderArray.reduce((acc, item) => {
     acc += Number(item.total);
@@ -67,7 +72,7 @@ const CreateBillScreen = () => {
   };
 
   const wordsIndian = amountInWordsIndian(billData.Grand_Total);
-  console.log("wordsIndian", wordsIndian);
+  // console.log("wordsIndian", wordsIndian);
   useEffect(() => {
     const cgst = Number(gstValue(totalVal, billData.CGST));
     const sgst = Number(gstValue(totalVal, billData.SGST));
@@ -123,8 +128,16 @@ const CreateBillScreen = () => {
   //   console.log("convertedData", convertedData);
   const handleNewBill = async (e) => {
     e.preventDefault();
-    console.log("new Bill");
-    console.log("billData", convertedData);
+    // console.log("new Bill");
+    // console.log("billData", convertedData);
+    try {
+      const newBill = await createBill(convertedData).unwrap();
+      console.log("newBill", newBill);
+      toast.success("Bill Created");
+    } catch (error) {
+      console.log("errr", error);
+      toast.error(error?.data?.message || error?.message);
+    }
   };
   const addItemsToBill = () => {
     // console.log("orderItemsInFunc", orderItems);
@@ -151,23 +164,6 @@ const CreateBillScreen = () => {
       <h1>Create New Bill</h1>
       <Row>
         <Form onSubmit={handleNewBill}>
-          <Col md={4} sm={12}>
-            {Object.entries(initialBillData)?.map(([key, value]) => {
-              return (
-                <Form.Group key={key} className="mb-3">
-                  <Form.Label>{changeText(key)}</Form.Label>
-                  <Form.Control
-                    type={typeof value === "number" ? "number" : "text"}
-                    placeholder={changeText(key)}
-                    name={key}
-                    value={key === "total" ? totalVal : billData[key]}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              );
-            })}
-          </Col>
-
           <Col md={8} sm={12}>
             <h4>Items</h4>
             <Row>
@@ -272,7 +268,25 @@ const CreateBillScreen = () => {
               )}
             </Row>
           </Col>
-          <Button type="submit" size="lg">
+
+          <Col md={4} sm={12}>
+            {Object.entries(initialBillData)?.map(([key, value]) => {
+              return (
+                <Form.Group key={key} className="mb-3">
+                  <Form.Label>{changeText(key)}</Form.Label>
+                  <Form.Control
+                    type={typeof value === "number" ? "number" : "text"}
+                    placeholder={changeText(key)}
+                    name={key}
+                    value={key === "total" ? totalVal : billData[key]}
+                    onChange={handleChange}
+                  />
+                </Form.Group>
+              );
+            })}
+          </Col>
+
+          <Button type="submit" size="lg" disabled={isLoading}>
             Create
           </Button>
         </Form>

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, InputGroup, Row, Col } from "react-bootstrap";
-import { useRegsiterMutation } from "../slices/usersApiSLice";
+import { useRegsiterMutation } from "../slices/usersApiSlice";
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState("");

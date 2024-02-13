@@ -6,6 +6,8 @@ import RegisterScreen from "./screens/RegisterScreen";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CreateBillScreen from "./screens/CreateBillScreen";
+import PrivateRoute from "./components/PrivateRoute";
+import React from "react";
 
 function App() {
   return (
@@ -28,7 +30,10 @@ function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
-          <Route path="/create-bill" element={<CreateBillScreen />} />
+          <Route
+            path="/create-bill"
+            element={<PrivateRoute element={<CreateBillScreen />} />}
+          />
         </Routes>
       </main>
     </div>
