@@ -8,10 +8,24 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-
+import { FaUser } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
+import { logout } from "../slices/authSlice";
+import { useLogoutMutation } from "../slices/usersApiSlice";
+import { toast } from "react-toastify";
 
 const Header = () => {
+  const { userInfo } = useSelector((state) => state?.auth);
+  const dispatch = useDispatch();
+  const [logoutCall] = useLogoutMutation();
+
+  // console.log("userInfo", userInfo);
+  const logoutHandler = async () => {
+    await logoutCall().unwrap();
+    toast.success("Logged Out");
+    dispatch(logout());
+  };
   return (
     <header>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -26,22 +40,30 @@ const Header = () => {
               style={{ maxHeight: "100px" }}
               navbarScroll
             >
-              <Nav.Link href="#action2">Link</Nav.Link>
+              {/* <Nav.Link href="#action2">Link</Nav.Link> */}
             </Nav>
-            <Nav className="ml-auto my-2 my-lg-0">
-              <LinkContainer to={"/login"}>
-                <Nav.Link href="#action2">Login</Nav.Link>
-              </LinkContainer>
-              <LinkContainer to={"/register"}>
-                <Nav.Link>Register</Nav.Link>
-              </LinkContainer>
-              {/* <NavDropdown title="Link" id="navbarScrollingDropdown">
-                
-                <NavDropdown.Item href="#action4">Admin </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">Register </NavDropdown.Item>
-              </NavDropdown> */}
-            </Nav>
+            {userInfo ? (
+              <NavDropdown title={userInfo?.name} id="username">
+                <LinkContainer to="/profile">
+                  <NavDropdown.Item>Profile</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Item onClick={logoutHandler}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <>
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <FaUser /> Login
+                  </Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/register" className="m-3">
+                  <Nav.Link>Register</Nav.Link>
+                </LinkContainer>
+              </>
+            )}
+
             <Form className="d-flex">
               <Form.Control
                 type="search"

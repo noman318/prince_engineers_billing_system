@@ -25,7 +25,7 @@ const LoginScreen = () => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
-      console.log("res", res);
+      // console.log("res", res);
       dispatch(setCredentials({ ...res }));
       toast.success("Logged In");
     } catch (error) {
