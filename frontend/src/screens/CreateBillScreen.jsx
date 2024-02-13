@@ -5,6 +5,7 @@ import numberToWords from "number-to-words";
 import indianNumberFormat from "indian-number-format";
 import { useCreateBillMutation } from "../slices/billsApiSlice";
 import { toast } from "react-toastify";
+import DatePicker from "react-datepicker";
 
 const CreateBillScreen = () => {
   const initialBillData = {
@@ -13,8 +14,8 @@ const CreateBillScreen = () => {
     GST_No: "",
     Our_GST_No: "27AWLPS1825L1ZZ",
     invoice_no: 0,
-    invoice_date: "",
-    our_date: "",
+    // invoice_date: "",
+    // our_date: "",
     our_challan_no: 0,
     total: 0.0,
     address: "",
@@ -39,6 +40,9 @@ const CreateBillScreen = () => {
   const [billData, setBillData] = useState(initialBillData);
   const [orderItems, setOrderItems] = useState(initialOrderItems);
   const [orderArray, setOrderArray] = useState([]);
+  const [invoiceDate, setInvoiceDate] = useState(null);
+  const [ourDate, setOurDate] = useState(null);
+
   //   console.log("orderItems", orderItems);
   //   console.log("orderArray", orderArray);
   const [createBill, { isLoading }] = useCreateBillMutation();
@@ -77,6 +81,9 @@ const CreateBillScreen = () => {
     const cgst = Number(gstValue(totalVal, billData.CGST));
     const sgst = Number(gstValue(totalVal, billData.SGST));
     const igst = Number(gstValue(totalVal, billData.IGST));
+    const newInvioceDate = JSON.stringify(invoiceDate);
+    const newOurDate = JSON.stringify(ourDate);
+    // console.log("newInvioceDate", newInvioceDate);
     const grandTotal =
       Number(totalVal) +
       Number(billData.packaging_charges) +
@@ -88,7 +95,8 @@ const CreateBillScreen = () => {
       total: totalVal,
       orderItems: orderArray,
       amount_in_words: wordsIndian,
-
+      invoice_date: newInvioceDate,
+      our_date: newOurDate,
       Grand_Total: grandTotal.toFixed(2),
     }));
   }, [
@@ -99,8 +107,12 @@ const CreateBillScreen = () => {
     wordsIndian,
     orderArray,
     totalVal,
+    invoiceDate,
+    ourDate,
   ]);
   //   console.log("billData", billData);
+  console.log("invoiceDate", typeof invoiceDate);
+  // console.log("ourDate", ourDate);
   const convertNumericProperties = (data) => {
     const convertProperty = (propValue) => {
       if (typeof propValue === "string" && !isNaN(propValue)) {
@@ -270,6 +282,24 @@ const CreateBillScreen = () => {
           </Col>
 
           <Col md={4} sm={12}>
+            <Form.Group className="mb-3">
+              <Form.Label>Invoice Date</Form.Label>
+              <br />
+              <DatePicker
+                showIcon
+                selected={invoiceDate}
+                onChange={(date) => setInvoiceDate(date)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Our Challan Date</Form.Label>
+              <br />
+              <DatePicker
+                showIcon
+                selected={ourDate}
+                onChange={(date) => setOurDate(date)}
+              />
+            </Form.Group>
             {Object.entries(initialBillData)?.map(([key, value]) => {
               return (
                 <Form.Group key={key} className="mb-3">

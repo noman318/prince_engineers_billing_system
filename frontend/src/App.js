@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CreateBillScreen from "./screens/CreateBillScreen";
 import PrivateRoute from "./components/PrivateRoute";
 import React from "react";
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   return (
