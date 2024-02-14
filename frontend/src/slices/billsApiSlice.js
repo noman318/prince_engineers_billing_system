@@ -10,7 +10,23 @@ export const billsApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getAllBills: builder.query({
+      query: () => ({
+        url: BILLS_URL,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    getBillById: builder.query({
+      query: (id) => ({
+        url: `${BILLS_URL}${id}`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
-export const { useCreateBillMutation } = billsApiSlice;
+export const {
+  useCreateBillMutation,
+  useGetAllBillsQuery,
+  useGetBillByIdQuery,
+} = billsApiSlice;

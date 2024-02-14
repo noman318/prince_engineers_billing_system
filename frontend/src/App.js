@@ -9,6 +9,8 @@ import CreateBillScreen from "./screens/CreateBillScreen";
 import PrivateRoute from "./components/PrivateRoute";
 import React from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import ViewBillScreen from "./screens/ViewBillScreen";
+import EditBillScreen from "./screens/EditBillScreen";
 
 function App() {
   return (
@@ -34,6 +36,14 @@ function App() {
           <Route
             path="/create-bill"
             element={<PrivateRoute element={<CreateBillScreen />} />}
+          />
+          <Route
+            path="/view/:id"
+            element={<PrivateRoute element={<ViewBillScreen />} />}
+          />
+          <Route
+            path="/edit/:id"
+            element={<PrivateRoute element={<EditBillScreen />} />}
           />
         </Routes>
       </main>

@@ -111,7 +111,7 @@ const CreateBillScreen = () => {
     ourDate,
   ]);
   //   console.log("billData", billData);
-  console.log("invoiceDate", typeof invoiceDate);
+  // console.log("invoiceDate", typeof invoiceDate);
   // console.log("ourDate", ourDate);
   const convertNumericProperties = (data) => {
     const convertProperty = (propValue) => {
@@ -165,7 +165,6 @@ const CreateBillScreen = () => {
     setOrderItems(initialOrderItems);
   };
   const removeItems = (id) => {
-    // console.log("id", id);
     const updateArray = orderArray?.filter((_, i) => id !== i);
     // console.log("updateArray", updateArray);
     setOrderArray(updateArray);
