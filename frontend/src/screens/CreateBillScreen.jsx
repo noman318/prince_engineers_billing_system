@@ -3,13 +3,19 @@ import { Container, Button, Form, Row, Col, Table } from "react-bootstrap";
 import { FaRegTrashAlt, FaPlusCircle } from "react-icons/fa";
 import numberToWords from "number-to-words";
 import indianNumberFormat from "indian-number-format";
-import { useCreateBillMutation } from "../slices/billsApiSlice";
+import {
+  useCreateBillMutation,
+  useGetBillByIdQuery,
+} from "../slices/billsApiSlice";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
+import { useParams } from "react-router-dom";
 
 const CreateBillScreen = () => {
+  const { id } = useParams();
+  const { data } = useGetBillByIdQuery(id);
+  const [mode, setMode] = useState("create");
   const initialBillData = {
-    client: "",
     name: "",
     GST_No: "",
     Our_GST_No: "27AWLPS1825L1ZZ",
@@ -42,7 +48,36 @@ const CreateBillScreen = () => {
   const [orderArray, setOrderArray] = useState([]);
   const [invoiceDate, setInvoiceDate] = useState(null);
   const [ourDate, setOurDate] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [client, setClient] = useState("");
 
+  useEffect(() => {
+    if (id) {
+      // If there is an id parameter, it means we are in update mode
+      setMode("update");
+    } else {
+      // If there is no id parameter, it means we are in create mode
+      setMode("create");
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (mode === "update" && data) {
+      // Set initial data for updating
+      setBillData(data);
+      setOrderArray(data.orderItems || []); // Assuming orderItems is an array
+      setInvoiceDate(
+        invoiceDate ||
+          (data && data.invoice_date
+            ? new Date(JSON.parse(data.invoice_date))
+            : null)
+      );
+      setOurDate(
+        ourDate ||
+          (data && data.our_date ? new Date(JSON.parse(data.our_date)) : null)
+      );
+    }
+  }, [mode, data, invoiceDate, ourDate]);
   //   console.log("orderItems", orderItems);
   //   console.log("orderArray", orderArray);
   const [createBill, { isLoading }] = useCreateBillMutation();
@@ -288,6 +323,7 @@ const CreateBillScreen = () => {
                 showIcon
                 selected={invoiceDate}
                 onChange={(date) => setInvoiceDate(date)}
+                required
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -297,6 +333,17 @@ const CreateBillScreen = () => {
                 showIcon
                 selected={ourDate}
                 onChange={(date) => setOurDate(date)}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Client</Form.Label>
+              <Form.Control
+                type={"text"}
+                placeholder={"Enter Client"}
+                name={"client"}
+                value={mode === "update" ? data?.client._id : client}
+                onChange={(e) => setClient(e.target.value)}
               />
             </Form.Group>
             {Object.entries(initialBillData)?.map(([key, value]) => {

@@ -1,4 +1,5 @@
 import React from "react";
+// eslint-disable-next-line no-unused-vars
 import { Container, Button } from "react-bootstrap";
 import { useGetBillByIdQuery } from "../slices/billsApiSlice";
 import { useParams } from "react-router-dom";
