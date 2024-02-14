@@ -6,14 +6,18 @@ import indianNumberFormat from "indian-number-format";
 import {
   useCreateBillMutation,
   useGetBillByIdQuery,
+  useUpdateBillMutation,
 } from "../slices/billsApiSlice";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import { useParams } from "react-router-dom";
+import { useGetAllClientsQuery } from "../slices/clientApiSlice";
 
 const CreateBillScreen = () => {
   const { id } = useParams();
-  const { data } = useGetBillByIdQuery(id);
+  const { data, refetch } = useGetBillByIdQuery(id);
+  const { data: clientData } = useGetAllClientsQuery();
+  // console.log("clientData", data);
   const [mode, setMode] = useState("create");
   const initialBillData = {
     name: "",
@@ -81,7 +85,8 @@ const CreateBillScreen = () => {
   //   console.log("orderItems", orderItems);
   //   console.log("orderArray", orderArray);
   const [createBill, { isLoading }] = useCreateBillMutation();
-
+  const [updateBillData, { isLoading: updateLoading }] =
+    useUpdateBillMutation(id);
   let totalVal;
   totalVal = orderArray.reduce((acc, item) => {
     acc += Number(item.total);
@@ -127,6 +132,7 @@ const CreateBillScreen = () => {
       Number(igst);
     setBillData((prevBillData) => ({
       ...prevBillData,
+      client: client,
       total: totalVal,
       orderItems: orderArray,
       amount_in_words: wordsIndian,
@@ -144,6 +150,7 @@ const CreateBillScreen = () => {
     totalVal,
     invoiceDate,
     ourDate,
+    client,
   ]);
   //   console.log("billData", billData);
   // console.log("invoiceDate", typeof invoiceDate);
@@ -178,9 +185,19 @@ const CreateBillScreen = () => {
     // console.log("new Bill");
     // console.log("billData", convertedData);
     try {
-      const newBill = await createBill(convertedData).unwrap();
-      console.log("newBill", newBill);
-      toast.success("Bill Created");
+      if (mode === "update") {
+        const update = await updateBillData({
+          id,
+          data: convertedData,
+        }).unwrap();
+        refetch();
+        console.log("update", update);
+        toast.success("Bill Updated");
+      } else {
+        const newBill = await createBill(convertedData).unwrap();
+        console.log("newBill", newBill);
+        toast.success("Bill Created");
+      }
     } catch (error) {
       console.log("errr", error);
       toast.error(error?.data?.message || error?.message);
@@ -193,7 +210,7 @@ const CreateBillScreen = () => {
       name,
       qty,
       rate,
-      total: orderItems.qty + orderItems.rate,
+      total: Number(orderItems.qty) + Number(orderItems.rate),
     };
     console.log("newItem", newItem);
     setOrderArray([...orderArray, newItem]);
@@ -207,7 +224,7 @@ const CreateBillScreen = () => {
 
   return (
     <Container>
-      <h1>Create New Bill</h1>
+      <h1> {mode === "update" ? "Update Bill" : "Create New Bill"} </h1>
       <Row>
         <Form onSubmit={handleNewBill}>
           <Col md={8} sm={12}>
@@ -282,7 +299,7 @@ const CreateBillScreen = () => {
                 </Button>
               </Col>
               {orderArray && orderArray.length > 0 && (
-                <Table responsive="sm">
+                <Table responsive="sm" striped bordered hover>
                   <thead>
                     <tr>
                       <th>Sr. No.</th>
@@ -302,7 +319,11 @@ const CreateBillScreen = () => {
                         <td>{item.rate}</td>
                         <td>{item.total}</td>
                         <Button
-                          style={{ backgroundColor: "red", color: "white" }}
+                          style={{
+                            backgroundColor: "red",
+                            color: "white",
+                            margin: "5% 30%",
+                          }}
                           onClick={() => removeItems(index)}
                         >
                           <FaRegTrashAlt />
@@ -338,13 +359,17 @@ const CreateBillScreen = () => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Client</Form.Label>
-              <Form.Control
-                type={"text"}
-                placeholder={"Enter Client"}
-                name={"client"}
-                value={mode === "update" ? data?.client._id : client}
+              <Form.Select
                 onChange={(e) => setClient(e.target.value)}
-              />
+                value={mode === "update" ? data?.client._id : client}
+              >
+                <option>Select Client</option>
+                {clientData?.map((data) => (
+                  <React.Fragment key={data?._id}>
+                    <option value={data?._id}>{data?.name}</option>
+                  </React.Fragment>
+                ))}
+              </Form.Select>
             </Form.Group>
             {Object.entries(initialBillData)?.map(([key, value]) => {
               return (
@@ -362,8 +387,8 @@ const CreateBillScreen = () => {
             })}
           </Col>
 
-          <Button type="submit" size="lg" disabled={isLoading}>
-            Create
+          <Button type="submit" size="lg" disabled={isLoading || updateLoading}>
+            {mode === "update" ? "Update" : "Create"}
           </Button>
         </Form>
       </Row>
