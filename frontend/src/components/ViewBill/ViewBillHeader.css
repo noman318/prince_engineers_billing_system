@@ -1,0 +1,56 @@
+header {
+  height: 10dvh;
+  padding: 5px;
+}
+.header_parent {
+  display: flex;
+  flex: 1;
+}
+.brand_name {
+  display: flex;
+  flex: 0.6;
+  flex-direction: column;
+}
+.brandClass {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.brandClass > h1 {
+  font-size: 3.5rem;
+  line-height: 1.5;
+  margin-left: 20px;
+  color: red;
+}
+.brandClass > img {
+  border: 2px solid black;
+  border-radius: 50%;
+  height: 30%;
+}
+.dates {
+  flex: 0.3;
+  margin-left: 5%;
+}
+.description {
+  font-weight: bolder;
+  color: rgba(15, 15, 201, 0.719);
+}
+.other_data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding-left: 35px;
+}
+.other_data > h6 {
+  margin-top: 10px;
+}
+tbody tr td:first-child {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.text-end,
+h4,
+h6 {
+  font-weight: "bolder";
+}
