@@ -24,7 +24,7 @@ const CreateBillScreen = () => {
   const { id } = useParams();
   const { data, refetch } = useGetBillByIdQuery(id);
   const { data: clientData } = useGetAllClientsQuery();
-  console.log("billData", data);
+  // console.log("billData", data);
   const navigate = useNavigate();
 
   const [mode, setMode] = useState("create");
@@ -409,7 +409,7 @@ const CreateBillScreen = () => {
           <br />
         </Form>
         {mode === "update" ? (
-          <div>
+          <div className="mb-4">
             <Button
               type="submit"
               size="sm"
