@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
 
 const registerUser = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, isAdmin } = req.body;
   try {
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -12,6 +12,7 @@ const registerUser = async (req, res, next) => {
         name,
         email,
         password,
+        isAdmin,
       });
       res.json(createUser);
     }

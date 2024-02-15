@@ -35,6 +35,7 @@ const BillTable = () => {
                 <th>Invoice Date</th>
                 <th>Grand Total</th>
                 <th>Payment Status</th>
+                <th>Delivery Status</th>
                 <th>View</th>
                 <th>Edit</th>
               </tr>
@@ -57,6 +58,19 @@ const BillTable = () => {
                       <>
                         <Badge size="sm" bg="danger">
                           Not Paid
+                        </Badge>
+                      </>
+                    )}
+                  </td>
+                  <td>
+                    {data.isDelivered ? (
+                      <>
+                        <Badge bg="success">Delivered</Badge>
+                      </>
+                    ) : (
+                      <>
+                        <Badge size="sm" bg="danger">
+                          Not Delivered
                         </Badge>
                       </>
                     )}

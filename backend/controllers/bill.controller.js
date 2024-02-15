@@ -141,9 +141,43 @@ const updateExistingBill = async (req, res, next) => {
   }
 };
 
-const updateBillToPaid = async (req, res, next) => {};
+const updateBillToPaid = async (req, res, next) => {
+  const { id } = req.params;
+  // console.log("id", id);
 
-const updateOrderToDelivered = async (req, res, next) => {};
+  try {
+    const bill = await Bill.findById(id);
+    if (!bill) {
+      throw new Error("No Bill Found");
+    } else {
+      bill.isPaid = true;
+      bill.paidAt = Date.now();
+      const updateToPaid = await bill.save();
+      // console.log("updateToPaid", updateToPaid);
+      return res.json(updateToPaid);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateOrderToDelivered = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const bill = await Bill.findById(id);
+    if (!bill) {
+      throw new Error("No Bill Found");
+    } else {
+      bill.isDelivered = true;
+      bill.deliveredAt = Date.now();
+      const updateToDeliver = await bill.save();
+      return res.json(updateToDeliver);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 const deleteBill = async (req, res, next) => {
   const { id } = req.params;
