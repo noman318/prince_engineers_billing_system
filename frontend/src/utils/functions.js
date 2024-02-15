@@ -44,4 +44,23 @@ const convertNumericProperties = (data) => {
   return convertedData;
 };
 
-export { changeText, amountInWordsIndian, gstValue, convertNumericProperties };
+const formatDate = (invoiceDate) => {
+  const date = new Date(invoiceDate.replace(/"/g, ""));
+
+  const options = { day: "numeric", month: "short", year: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+};
+
+const formatIndianNumber = (amount) => {
+  const formattedAmount = Number(amount).toLocaleString("en-IN");
+  return formattedAmount;
+};
+
+export {
+  changeText,
+  amountInWordsIndian,
+  gstValue,
+  convertNumericProperties,
+  formatDate,
+  formatIndianNumber,
+};

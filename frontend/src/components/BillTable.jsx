@@ -5,22 +5,14 @@ import { Table, Badge } from "react-bootstrap";
 import { FaEye } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { formatDate, formatIndianNumber } from "../utils/functions";
 
 const BillTable = () => {
   const { data, isLoading, isError } = useGetAllBillsQuery();
   const navigate = useNavigate();
 
   // console.log("data", data[5]);
-  const formatDate = (invoiceDate) => {
-    const date = new Date(invoiceDate.replace(/"/g, ""));
 
-    const options = { day: "numeric", month: "short", year: "numeric" };
-    return date.toLocaleDateString("en-US", options);
-  };
-  const formatIndianNumber = (amount) => {
-    const formattedAmount = Number(amount).toLocaleString("en-IN");
-    return formattedAmount;
-  };
   //   console.log("data[5]", data[3]);
 
   return (
@@ -43,7 +35,8 @@ const BillTable = () => {
                 <th>Invoice Date</th>
                 <th>Grand Total</th>
                 <th>Payment Status</th>
-                <th>Actions</th>
+                <th>View</th>
+                <th>Edit</th>
               </tr>
             </thead>
 
@@ -73,6 +66,8 @@ const BillTable = () => {
                       style={{ margin: "10px", cursor: "pointer" }}
                       onClick={() => navigate(`/view/${data._id}`)}
                     />
+                  </td>
+                  <td>
                     <MdEdit
                       style={{ marginLeft: "10px", cursor: "pointer" }}
                       onClick={() => navigate(`/edit/${data._id}`)}
