@@ -2,16 +2,16 @@ import numberToWords from "number-to-words";
 import indianNumberFormat from "indian-number-format";
 
 const amountInWordsIndian = (number) => {
-  const words = numberToWords.toWords(number);
-  return indianNumberFormat.format(words);
+  const words = numberToWords?.toWords(number);
+  return indianNumberFormat?.format(words);
 };
 
 const changeText = (str) => {
   const splitStr = str?.split("_");
   const capitalize = splitStr?.map(
-    (item) => item?.charAt(0)?.toUpperCase() + item.slice(1)
+    (item) => item?.charAt(0)?.toUpperCase() + item?.slice(1)
   );
-  const finalText = capitalize.join(" ");
+  const finalText = capitalize?.join(" ");
   return finalText;
 };
 
@@ -27,7 +27,7 @@ const convertNumericProperties = (data) => {
       return Number(propValue);
     } else if (typeof propValue === "object") {
       if (Array.isArray(propValue)) {
-        return propValue.map(convertProperty);
+        return propValue?.map(convertProperty);
       } else {
         return convertNumericProperties(propValue);
       }
@@ -37,7 +37,7 @@ const convertNumericProperties = (data) => {
 
   const convertedData = { ...data };
 
-  Object.keys(convertedData).forEach((prop) => {
+  Object.keys(convertedData)?.forEach((prop) => {
     convertedData[prop] = convertProperty(convertedData[prop]);
   });
 
@@ -45,10 +45,10 @@ const convertNumericProperties = (data) => {
 };
 
 const formatDate = (invoiceDate) => {
-  const date = new Date(invoiceDate.replace(/"/g, ""));
+  const date = new Date(invoiceDate?.replace(/"/g, ""));
 
   const options = { day: "numeric", month: "short", year: "numeric" };
-  return date.toLocaleDateString("en-US", options);
+  return date?.toLocaleDateString("en-US", options);
 };
 
 const formatIndianNumber = (amount) => {

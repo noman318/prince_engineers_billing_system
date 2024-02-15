@@ -107,6 +107,8 @@ const CreateBillScreen = () => {
   };
 
   const wordsIndian = amountInWordsIndian(billData.Grand_Total);
+  const newWords = changeText(wordsIndian);
+  console.log("newWords", newWords);
   // console.log("wordsIndian", wordsIndian);
   useEffect(() => {
     const cgst = Number(gstValue(totalVal, billData.CGST));
@@ -126,7 +128,7 @@ const CreateBillScreen = () => {
       client: client,
       total: totalVal,
       orderItems: orderArray,
-      amount_in_words: wordsIndian,
+      amount_in_words: newWords,
       invoice_date: newInvioceDate,
       our_date: newOurDate,
       Grand_Total: grandTotal.toFixed(2),
@@ -136,7 +138,7 @@ const CreateBillScreen = () => {
     billData.IGST,
     billData.SGST,
     billData.packaging_charges,
-    wordsIndian,
+    newWords,
     orderArray,
     totalVal,
     invoiceDate,
