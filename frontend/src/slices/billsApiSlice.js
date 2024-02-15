@@ -29,6 +29,18 @@ export const billsApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    updateBilltoPaid: builder.mutation({
+      query: (id) => ({
+        url: `${BILLS_URL}${id}/pay`,
+        method: "PUT",
+      }),
+    }),
+    updateBilltoDeliver: builder.mutation({
+      query: (id) => ({
+        url: `${BILLS_URL}${id}/deliver`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
@@ -37,4 +49,6 @@ export const {
   useGetAllBillsQuery,
   useGetBillByIdQuery,
   useUpdateBillMutation,
+  useUpdateBilltoPaidMutation,
+  useUpdateBilltoDeliverMutation,
 } = billsApiSlice;

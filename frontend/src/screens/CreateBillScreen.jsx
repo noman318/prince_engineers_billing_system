@@ -6,6 +6,8 @@ import {
   useCreateBillMutation,
   useGetBillByIdQuery,
   useUpdateBillMutation,
+  useUpdateBilltoDeliverMutation,
+  useUpdateBilltoPaidMutation,
 } from "../slices/billsApiSlice";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
@@ -22,7 +24,7 @@ const CreateBillScreen = () => {
   const { id } = useParams();
   const { data, refetch } = useGetBillByIdQuery(id);
   const { data: clientData } = useGetAllClientsQuery();
-  // console.log("clientData", data);
+  console.log("billData", data);
   const navigate = useNavigate();
 
   const [mode, setMode] = useState("create");
@@ -89,6 +91,10 @@ const CreateBillScreen = () => {
   //   console.log("orderItems", orderItems);
   //   console.log("orderArray", orderArray);
   const [createBill, { isLoading }] = useCreateBillMutation();
+  const [updateToPaid, { isLoading: payLoading }] =
+    useUpdateBilltoPaidMutation();
+  const [updateToDeliverd, { isLoading: deliverLoading }] =
+    useUpdateBilltoDeliverMutation();
   const [updateBillData, { isLoading: updateLoading }] =
     useUpdateBillMutation(id);
   let totalVal;
@@ -193,6 +199,38 @@ const CreateBillScreen = () => {
     setOrderArray([...orderArray, newItem]);
     setOrderItems(initialOrderItems);
   };
+  const updateBillToPaidHandler = async (id) => {
+    console.log("id", id);
+    if (mode === "update" && data?.isPaid === false) {
+      try {
+        await updateToPaid(id).unwrap();
+        // console.log("updateBill", updateBill);
+        toast.success("Status Updated");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } catch (error) {
+        console.log("error", error);
+        toast.error(error?.data?.message || error?.message);
+      }
+    }
+  };
+  const updateBillToDeliverHandler = async (id) => {
+    console.log("clicked ");
+    if (mode === "update" && data?.isDelivered === false) {
+      try {
+        await updateToDeliverd(id).unwrap();
+        // console.log("updateBill", updateBill);
+        toast.success("Status Updated");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } catch (error) {
+        console.log("error", error);
+        toast.error(error?.data?.message || error?.message);
+      }
+    }
+  };
   const removeItems = (id) => {
     const updateArray = orderArray?.filter((_, i) => id !== i);
     // console.log("updateArray", updateArray);
@@ -203,7 +241,7 @@ const CreateBillScreen = () => {
     <Container>
       <h1> {mode === "update" ? "Update Bill" : "Create New Bill"} </h1>
       <Row>
-        <Form onSubmit={handleNewBill}>
+        <Form onSubmit={handleNewBill} className="mb-4">
           <Col md={8} sm={12}>
             <h4>Items</h4>
             <Row>
@@ -367,7 +405,33 @@ const CreateBillScreen = () => {
           <Button type="submit" size="lg" disabled={isLoading || updateLoading}>
             {mode === "update" ? "Update" : "Create"}
           </Button>
+          <br />
+          <br />
         </Form>
+        {mode === "update" ? (
+          <div>
+            <Button
+              type="submit"
+              size="sm"
+              className="mx-4"
+              disabled={payLoading || data?.isPaid === true}
+              onClick={() => updateBillToPaidHandler(id)}
+            >
+              Mark as Paid
+            </Button>
+
+            <Button
+              type="submit"
+              size="sm"
+              disabled={deliverLoading || data?.isDelivered === true}
+              onClick={() => updateBillToDeliverHandler(id)}
+            >
+              Mark as Delivered
+            </Button>
+          </div>
+        ) : (
+          <></>
+        )}
       </Row>
     </Container>
   );
