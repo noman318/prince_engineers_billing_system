@@ -109,6 +109,8 @@ const updateExistingBill = async (req, res, next) => {
     // console.log("bill", bill);
     if (!bill) {
       throw new Error("No Bill Found");
+    } else if (orderItems && orderItems.length === 0) {
+      throw new Error("No Order Items");
     } else {
       const updateBill = await Bill.findByIdAndUpdate(
         id,
