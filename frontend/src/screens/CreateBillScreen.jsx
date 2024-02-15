@@ -108,7 +108,7 @@ const CreateBillScreen = () => {
 
   const wordsIndian = amountInWordsIndian(billData.Grand_Total);
   const newWords = changeText(wordsIndian);
-  console.log("newWords", newWords);
+  // console.log("newWords", newWords);
   // console.log("wordsIndian", wordsIndian);
   useEffect(() => {
     const cgst = Number(gstValue(totalVal, billData.CGST));
