@@ -40,7 +40,7 @@ const BillTable = () => {
                 <th>Sr. No.</th>
                 <th>Invoice No.</th>
                 <th>Client Name</th>
-                <th>Last Name</th>
+                <th>Invoice Date</th>
                 <th>Grand Total</th>
                 <th>Payment Status</th>
                 <th>Actions</th>
