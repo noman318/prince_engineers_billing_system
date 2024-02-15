@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Button, Form, Row, Col, Table } from "react-bootstrap";
 import { FaRegTrashAlt, FaPlusCircle } from "react-icons/fa";
-import numberToWords from "number-to-words";
-import indianNumberFormat from "indian-number-format";
+
 import {
   useCreateBillMutation,
   useGetBillByIdQuery,
@@ -10,14 +9,22 @@ import {
 } from "../slices/billsApiSlice";
 import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGetAllClientsQuery } from "../slices/clientApiSlice";
+import {
+  amountInWordsIndian,
+  changeText,
+  convertNumericProperties,
+  gstValue,
+} from "../utils/functions";
 
 const CreateBillScreen = () => {
   const { id } = useParams();
   const { data, refetch } = useGetBillByIdQuery(id);
   const { data: clientData } = useGetAllClientsQuery();
   // console.log("clientData", data);
+  const navigate = useNavigate();
+
   const [mode, setMode] = useState("create");
   const initialBillData = {
     name: "",
@@ -37,10 +44,7 @@ const CreateBillScreen = () => {
     Grand_Total: 0.0,
     amount_in_words: "",
   };
-  const amountInWordsIndian = (number) => {
-    const words = numberToWords.toWords(number);
-    return indianNumberFormat.format(words);
-  };
+
   const initialOrderItems = {
     name: "",
     qty: 0,
@@ -93,19 +97,6 @@ const CreateBillScreen = () => {
     return acc;
   }, 0);
 
-  const changeText = (str) => {
-    const splitStr = str?.split("_");
-    const capitalize = splitStr?.map(
-      (item) => item?.charAt(0)?.toUpperCase() + item.slice(1)
-    );
-    const finalText = capitalize.join(" ");
-    return finalText;
-  };
-  const gstValue = (total, gstType) => {
-    // console.log("gstType", gstType);
-    // console.log("total", total);
-    return Math.round(Number((total * gstType) / 100));
-  };
   //   console.log("gstValue", gstValue(totalVal, cgst));
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -155,28 +146,6 @@ const CreateBillScreen = () => {
   //   console.log("billData", billData);
   // console.log("invoiceDate", typeof invoiceDate);
   // console.log("ourDate", ourDate);
-  const convertNumericProperties = (data) => {
-    const convertProperty = (propValue) => {
-      if (typeof propValue === "string" && !isNaN(propValue)) {
-        return Number(propValue);
-      } else if (typeof propValue === "object") {
-        if (Array.isArray(propValue)) {
-          return propValue.map(convertProperty);
-        } else {
-          return convertNumericProperties(propValue);
-        }
-      }
-      return propValue;
-    };
-
-    const convertedData = { ...data };
-
-    Object.keys(convertedData).forEach((prop) => {
-      convertedData[prop] = convertProperty(convertedData[prop]);
-    });
-
-    return convertedData;
-  };
 
   const convertedData = convertNumericProperties(billData);
   //   console.log("convertedData", convertedData);
@@ -193,10 +162,16 @@ const CreateBillScreen = () => {
         refetch();
         console.log("update", update);
         toast.success("Bill Updated");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
       } else {
         const newBill = await createBill(convertedData).unwrap();
         console.log("newBill", newBill);
         toast.success("Bill Created");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
       }
     } catch (error) {
       console.log("errr", error);
@@ -210,7 +185,7 @@ const CreateBillScreen = () => {
       name,
       qty,
       rate,
-      total: Number(orderItems.qty) + Number(orderItems.rate),
+      total: Number(orderItems.qty) * Number(orderItems.rate),
     };
     console.log("newItem", newItem);
     setOrderArray([...orderArray, newItem]);
