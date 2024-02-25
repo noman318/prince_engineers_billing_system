@@ -21,7 +21,7 @@ const ViewBillScreen = () => {
     try {
       setLoading(true);
       const capture = document.querySelector(".bill-pdf");
-      console.log("capture", capture);
+      // console.log("capture", capture);
       setLoading(true);
       html2canvas(capture).then((canvas) => {
         const imgData = canvas.toDataURL("img/png");
@@ -58,12 +58,12 @@ const ViewBillScreen = () => {
         <div>Something went wrong</div>
       ) : (
         <div className="bill-pdf">
-          <Container className="border border-2 p-4">
+          <Container className="border border-2" style={{ padding: "2.5rem" }}>
             <p className="text-center">Tax Invoice</p>
             <hr />
             <ViewBillHeader data={data} />
             <p
-              style={{ width: "50%", marginLeft: "12%", marginTop: "2%" }}
+              style={{ width: "50%", marginLeft: "9%", marginTop: "2%" }}
               className="description"
             >
               SPECIALIST IN: GATE VALVE, SAFETY VALVE, NEEDLE VALVE, BALL VALVE,

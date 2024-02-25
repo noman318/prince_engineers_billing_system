@@ -9,10 +9,7 @@ const ViewBillHeader = ({ data }) => {
       <div className="header_parent">
         <div className="brand_name">
           <div className="brandClass">
-            <img
-              src="https://www.instrumentation-fittings.com/wp-content/uploads/2016/06/Gate-Valve-Bar-Stock.jpg"
-              alt=""
-            />
+            <img src="../Gate_Valve.jpg" alt="valve_logo" />
             <h1>Prince Engineers</h1>
           </div>
         </div>
@@ -28,8 +25,13 @@ const ViewBillHeader = ({ data }) => {
             <h6>{data?.invoice_no}</h6>
           </div>
           <br />
-          <h6>Invoice Date</h6>
-          <DatePicker selected={JSON?.parse(data?.invoice_date)} />
+          <div
+            className="d-flex justify-content-center align-items-center gap-4"
+            style={{ marginLeft: "-12%" }}
+          >
+            <h6>Invoice Date: </h6>
+            <DatePicker selected={JSON?.parse(data?.invoice_date)} />
+          </div>
           <br />
         </div>
       </div>

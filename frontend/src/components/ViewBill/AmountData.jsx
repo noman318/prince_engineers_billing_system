@@ -12,7 +12,13 @@ const AmountData = ({ data }) => {
         <Col md={8}>
           <span style={{ display: "flex", gap: "1rem" }}>
             <h5>Amount (In Words): {"  "}</h5>
-            <p style={{ textDecoration: "underline" }}>
+            <p
+              style={{
+                textDecoration: "underline",
+                textTransform: "capitalize",
+                fontWeight: "bolder",
+              }}
+            >
               {data?.amount_in_words}
             </p>
           </span>
