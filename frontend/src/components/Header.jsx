@@ -14,10 +14,12 @@ import { LinkContainer } from "react-router-bootstrap";
 import { logout } from "../slices/authSlice";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [logoutCall] = useLogoutMutation();
 
   // console.log("userInfo", userInfo);
@@ -25,6 +27,9 @@ const Header = () => {
     await logoutCall().unwrap();
     toast.success("Logged Out");
     dispatch(logout());
+    setTimeout(() => {
+      navigate("/login");
+    }, 3000);
   };
   return (
     <header>
