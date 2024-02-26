@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import {
   Nav,
-  // eslint-disable-next-line no-unused-vars
   NavDropdown,
   Navbar,
   Container,
@@ -73,7 +73,7 @@ const Header = () => {
               </>
             )}
 
-            <Form className="d-flex">
+            {/* <Form className="d-flex">
               <Form.Control
                 type="search"
                 placeholder="Search"
@@ -81,7 +81,7 @@ const Header = () => {
                 aria-label="Search"
               />
               <Button variant="outline-success">Search</Button>
-            </Form>
+            </Form> */}
           </Navbar.Collapse>
         </Container>
       </Navbar>

@@ -2,10 +2,13 @@ import React from "react";
 import { Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import BillTable from "../components/BillTable";
+import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
-  const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state?.auth);
 
+  const navigate = useNavigate();
+  console.log("userInfo", userInfo);
   return (
     <main>
       <Container>
@@ -13,7 +16,13 @@ const HomeScreen = () => {
         <Button onClick={() => navigate("/create-bill")} className="mb-4">
           Create Bill
         </Button>
-        <BillTable />
+        {userInfo ? (
+          <BillTable />
+        ) : (
+          <>
+            <h2 className="text-center">Please Authorize yourself</h2>
+          </>
+        )}
       </Container>
     </main>
   );
