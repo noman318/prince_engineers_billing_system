@@ -14,6 +14,7 @@
     "indian-number-format": "^1.0.5",
     "jspdf": "^2.5.1",
     "number-to-words": "^1.2.4",
+    "prince_engineers_billing_system": "file:..",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-datepicker": "^6.1.0",
